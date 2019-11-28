@@ -28,7 +28,7 @@ with open('README.md') as f:
 install_req = ["odml", "docopt", "pathlib", "xmltodict"]
 
 setup(
-    name='odMLtools',
+    name='odmltools',
     version=VERSION,
     description='open metadata Markup Language convenience tools',
     author=AUTHOR,
