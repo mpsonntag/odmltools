@@ -31,7 +31,11 @@ class TestDataciteIntegration(unittest.TestCase):
 
         invalid_file = os.path.join(self.resources, "noxml.md")
         with self.assertRaises(dimp.ParserException):
-            _ = dimp.dict_from_xml(invalid_file)
+            _ = dimp.handle_document(invalid_file, self.tmp_dir)
+
+        invalid_dc_file = os.path.join(self.resources, "load.xml")
+        with self.assertRaises(dimp.ParserException):
+            _ = dimp.handle_document(invalid_dc_file, self.tmp_dir)
 
         dc_fn = "fullDataCiteSchema.xml"
         dc_file = os.path.join(self.resources, dc_fn)
