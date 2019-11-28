@@ -80,7 +80,9 @@ def dict_from_xml(xml_file):
         with open(xml_file) as file:
             doc = xmltodict.parse(file.read())
     except ExpatError as exc:
-        raise ParserException("%s" % exp_err.messages[exc.code])
+        msg = "[Error] Could not load file '%s': %s" % (xml_file,
+                                                        exp_err.messages[exc.code])
+        raise ParserException(msg)
 
     return doc
 
