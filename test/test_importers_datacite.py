@@ -9,7 +9,7 @@ import unittest
 import odmltools.importers.import_datacite as dimp
 
 
-class TestSection(unittest.TestCase):
+class TestDatacite(unittest.TestCase):
     def setUp(self):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         self.resources = os.path.join(dir_path, "resources")
