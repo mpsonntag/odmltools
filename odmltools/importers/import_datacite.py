@@ -80,7 +80,9 @@ def dict_from_xml(xml_file):
         with open(xml_file) as file:
             doc = xmltodict.parse(file.read())
     except ExpatError as exc:
-        raise ParserException("%s" % exp_err.messages[exc.code])
+        msg = "[Error] Could not load file '%s': %s" % (xml_file,
+                                                        exp_err.messages[exc.code])
+        raise ParserException(msg)
 
     return doc
 
@@ -513,6 +515,8 @@ def handle_document(cite_in, out_root, backend="XML", print_doc=False):
     if os.path.isfile(out_file):
         out_file = os.path.join(out_root, "%s(copy).%s" % (out_name, backend.lower()))
 
+    # Provide original file name
+    odml_doc._origin_file_name = os.path.basename(cite_in)
     save_odml(odml_doc, out_file, backend)
 
 

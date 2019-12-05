@@ -1,3 +1,7 @@
+![Travis build](https://travis-ci.org/G-Node/odmltools.svg?branch=master)
+[![Build status](https://ci.appveyor.com/api/projects/status/oo5lxr6h4pfc9ly7/branch/master?svg=true)](https://ci.appveyor.com/project/G-Node/odmltools/branch/master)
+![Test coverage](https://coveralls.io/repos/github/G-Node/odmltools/badge.svg?branch=master)
+
 # odmltools
 
 odmltools is a package collecting convenience scripts for the odML python-project.
