@@ -44,3 +44,18 @@ class TestDataciteIntegration(unittest.TestCase):
         # make sure the file has been created and is an accessible odml file
         doc = odml.load(os.path.join(self.tmp_dir, dc_fn))
         self.assertGreater(len(doc), 0)
+
+    def test_complete_conversion_namespaces(self):
+        # This test should be split up into multiple tests
+        # but for now converting a complete datacite xml
+        # file to odml should at least not break when
+        # changes to the code are made.
+
+        dcns_fn = "fullDataCiteSchemaNS.xml"
+        dc_file = os.path.join(self.resources, dcns_fn)
+        dimp.handle_document(dc_file, self.tmp_dir)
+
+        doc = odml.load(os.path.join(self.tmp_dir, dcns_fn))
+        self.assertEqual(len(doc.sections['DataCite']), 19)
+        self.assertEqual(len(doc.sections['DataCite'].sections), 15)
+        self.assertEqual(len(doc.sections['DataCite'].properties), 4)
