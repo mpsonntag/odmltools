@@ -45,6 +45,9 @@ from odml.tools.parser_utils import SUPPORTED_PARSERS
 
 
 VERSION = "0.1.0"
+# DataCite namespaces that need to be removed from the individual XML tags before the
+# XML file can be properly processed.
+COLLAPSE_NS = ['http://datacite.org/schema/kernel-4']
 
 
 class ParserException(Exception):
@@ -76,9 +79,14 @@ def dict_from_xml(xml_file):
     :return: dictionary containing the contents of the xml file.
     """
 
+    ns_remove = {}
+    for nspace in COLLAPSE_NS:
+        ns_remove[nspace] = None
+
     try:
         with open(xml_file) as file:
-            doc = xmltodict.parse(file.read())
+            doc = xmltodict.parse(file.read(),
+                                  process_namespaces=True, namespaces=ns_remove)
     except ExpatError as exc:
         msg = "[Error] Could not load file '%s': %s" % (xml_file,
                                                         exp_err.messages[exc.code])
