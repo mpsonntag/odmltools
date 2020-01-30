@@ -59,3 +59,13 @@ class TestDataciteIntegration(unittest.TestCase):
         self.assertEqual(len(doc.sections['DataCite']), 19)
         self.assertEqual(len(doc.sections['DataCite'].sections), 15)
         self.assertEqual(len(doc.sections['DataCite'].properties), 4)
+
+    def test_extra_namespaces(self):
+        extra_fn = "invalidNS.xml"
+        extra_file = os.path.join(self.resources, extra_fn)
+
+        with self.assertRaises(dimp.ParserException):
+            dimp.handle_document(extra_file, self.tmp_dir)
+
+        extra_nspace = ["http://datacite.org/schema/kernel-2"]
+        dimp.handle_document(extra_file, self.tmp_dir, extra_ns=extra_nspace)
