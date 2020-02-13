@@ -4,7 +4,7 @@ Convenience script to parse a datacite XML file or whole directories
 containing datacite XML files and create odML files with the parsed
 information.
 
-Usage: odmlimportdatacite [-f FORMAT] [-o OUT] [-r] [-p] INPUT
+Usage: odmlimportdatacite [-f FORMAT] [-o OUT] [-n NAMESPACE ...] [-r] [-p] INPUT
 
 Arguments:
     INPUT    Path and filename of the datacite XML file to be parsed.
@@ -13,17 +13,21 @@ Arguments:
              directories will be parsed to odML.
 
 Options:
-    -f FORMAT   odML output file format. Available formats are
-                  'XML', 'JSON', 'YAML', 'RDF'. Default format is 'XML'.
-    -o OUT      Output directory. Must exist if specified.
-                  If not specified, output files will be written to the
-                  current directory.
-    -r          [Optional] Walk recursively through a repository.
-                  and convert all datacite files found.
-    -p          [Optional] Print the parsed document tree(s) to the command line.
-                   Default is False.
-    -h --help   Show this screen.
-    --version   Show version number.
+    -f FORMAT       odML output file format. Available formats are
+                      'XML', 'JSON', 'YAML', 'RDF'. Default format is 'XML'.
+    -o OUT          Output directory. Must exist if specified.
+                      If not specified, output files will be written to the
+                      current directory.
+    -r              [Optional] Walk recursively through a repository.
+                      and convert all datacite files found.
+    -n NAMESPACE    [Optional] By default only the namespace 'http://datacite.org/schema/kernel-4'
+                    is properly handled. Use this option to add any additional namespaces
+                      your DataCite files contain so they can be properly parsed and handled.
+                      The option can be used multiple times.
+    -p              [Optional] Print the parsed document tree(s) to the command line.
+                      Default is False.
+    -h --help       Show this screen.
+    --version       Show version number.
 """
 
 import os
@@ -45,6 +49,9 @@ from odml.tools.parser_utils import SUPPORTED_PARSERS
 
 
 VERSION = "0.1.0"
+# DataCite namespaces that need to be removed from the individual XML tags before the
+# XML file can be properly processed.
+COLLAPSE_NS = ['http://datacite.org/schema/kernel-4']
 
 
 class ParserException(Exception):
@@ -68,17 +75,27 @@ def camel_to_snake(in_string):
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', tmp).lower()
 
 
-def dict_from_xml(xml_file):
+def dict_from_xml(xml_file, extra_ns=None):
     """
     Parse the contents of an xml file into a python dictionary.
 
     :param xml_file: Location of the xml file to be parsed.
+    :param extra_ns: Custom namespaces to collapse.
     :return: dictionary containing the contents of the xml file.
     """
 
+    remove_nspaces = {}
+    for nspace in COLLAPSE_NS:
+        remove_nspaces[nspace] = None
+
+    if extra_ns:
+        for nspace in extra_ns:
+            remove_nspaces[nspace] = None
+
     try:
         with open(xml_file) as file:
-            doc = xmltodict.parse(file.read())
+            doc = xmltodict.parse(file.read(),
+                                  process_namespaces=True, namespaces=remove_nspaces)
     except ExpatError as exc:
         msg = "[Error] Could not load file '%s': %s" % (xml_file,
                                                         exp_err.messages[exc.code])
@@ -463,7 +480,9 @@ def parse_datacite_dict(doc):
                 be parsed.
     """
     if not doc or "resource" not in doc:
-        raise ParserException("Could not find root")
+        msg = "Could not find root. "
+        msg += "Please escape any XML namespace using the '-n' command line option."
+        raise ParserException(msg)
 
     datacite_root = doc["resource"]
     if "identifier" not in datacite_root:
@@ -486,13 +505,13 @@ def parse_datacite_dict(doc):
     return odml_doc
 
 
-def handle_document(cite_in, out_root, backend="XML", print_doc=False):
+def handle_document(cite_in, out_root, backend="XML", print_doc=False, extra_ns=None):
     print("[INFO] Handling file '%s'" % cite_in)
 
     # Read document from input file
     doc = None
     try:
-        doc = dict_from_xml(cite_in)
+        doc = dict_from_xml(cite_in, extra_ns)
     except ParserException as exc:
         exc_message = "[Error] Could not parse datacite file '%s'\n\t%s" % (cite_in, exc)
         raise ParserException(exc_message)
@@ -553,17 +572,23 @@ def main(args=None):
 
     print_file = parser["-p"]
 
+    # Add extra XML namespaces to collapse
+    extra_ns = []
+    if parser["-n"]:
+        for namespace in parser["-n"]:
+            extra_ns.append(namespace)
+
     # File conversion
     if recursive:
         xfiles = list(pathlib.Path(cite_in).rglob('*.xml'))
         for file in xfiles:
             try:
-                handle_document(file, out_root, backend, print_file)
+                handle_document(file, out_root, backend, print_file, extra_ns)
             except ParserException as exc:
                 print(exc)
     else:
         try:
-            handle_document(cite_in, out_root, backend, print_file)
+            handle_document(cite_in, out_root, backend, print_file, extra_ns)
         except ParserException as exc:
             print(exc)
             return exit(1)

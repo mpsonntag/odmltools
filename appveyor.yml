@@ -10,10 +10,16 @@ environment:
     - PYTHON: "C:\\Python37"
       PYVER: 3
       BITS: 32
+    - PYTHON: "C:\\Python38"
+      PYVER: 3
+      BITS: 32
     - PYTHON: "C:\\Python36-x64"
       PYVER: 3
       BITS: 64
     - PYTHON: "C:\\Python37-x64"
+      PYVER: 3
+      BITS: 64
+    - PYTHON: "C:\\Python38-x64"
       PYVER: 3
       BITS: 64
 
@@ -25,7 +31,7 @@ init:
 build: false
 
 install:
-  - python -m pip install xmltodict
+  - python -m pip install odml xmltodict
 
 test_script:
   - python --version

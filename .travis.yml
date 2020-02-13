@@ -25,6 +25,10 @@ matrix:
       language: generic
       env:
         - OSXENV=3.7.0
+    - os: osx
+      language: generic
+      env:
+        - OSXENV=3.8.0
 
 install:
   - export PYVER=${TRAVIS_PYTHON_VERSION:0:1}
