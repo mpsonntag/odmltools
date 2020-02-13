@@ -61,7 +61,7 @@ class TestDataciteIntegration(unittest.TestCase):
         self.assertEqual(len(doc.sections['DataCite'].properties), 4)
 
     def test_extra_namespaces(self):
-        extra_fn = "invalidNS.xml"
+        extra_fn = "unsupportedNS.xml"
         extra_file = os.path.join(self.resources, extra_fn)
 
         with self.assertRaises(dimp.ParserException):
