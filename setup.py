@@ -25,7 +25,7 @@ packages = [
 with open('README.md') as f:
     description_text = f.read()
 
-install_req = ["odml", "docopt", "pathlib", "xmltodict"]
+install_req = ["odml", "docopt", "xmltodict"]
 
 setup(
     name='odmltools',
