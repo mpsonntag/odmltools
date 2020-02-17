@@ -1,6 +1,7 @@
 ![Travis build](https://travis-ci.org/G-Node/odmltools.svg?branch=master)
 [![Build status](https://ci.appveyor.com/api/projects/status/oo5lxr6h4pfc9ly7/branch/master?svg=true)](https://ci.appveyor.com/project/G-Node/odmltools/branch/master)
 ![Test coverage](https://coveralls.io/repos/github/G-Node/odmltools/badge.svg?branch=master)
+[![PyPI version](https://img.shields.io/pypi/v/odmltools.svg)](https://pypi.org/project/odmltools/)
 
 # odmltools
 
@@ -20,7 +21,15 @@ detailed usage descriptions by adding the `help` flag to the command.
 
     odmlimportdatacite -h
 
-# Building from source
+# Installation
+
+## pip installation
+
+The easiest way to install the latest release is via the [odmltools PyPI package](https://pypi.org/project/odmltools/https://pypi.org/project/odmltools/):
+
+    pip install odmltools
+
+## Building from source
 
 To download the odmltools library please either use git and clone
 the repository from GitHub:
