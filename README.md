@@ -1,6 +1,6 @@
-![Travis build](https://travis-ci.org/G-Node/odmltools.svg?branch=master)
+[![Travis build](https://travis-ci.org/G-Node/odmltools.svg?branch=master)](https://travis-ci.org/G-Node/odmltools)
 [![Build status](https://ci.appveyor.com/api/projects/status/oo5lxr6h4pfc9ly7/branch/master?svg=true)](https://ci.appveyor.com/project/G-Node/odmltools/branch/master)
-![Test coverage](https://coveralls.io/repos/github/G-Node/odmltools/badge.svg?branch=master)
+[![Test coverage](https://coveralls.io/repos/github/G-Node/odmltools/badge.svg?branch=master)](https://coveralls.io/github/G-Node/odmltools)
 [![PyPI version](https://img.shields.io/pypi/v/odmltools.svg)](https://pypi.org/project/odmltools/)
 
 # odmltools
